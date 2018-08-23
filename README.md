@@ -76,6 +76,7 @@ I tested all functions of all contracts for their functionality, because I chang
 
 ### Used Libraries
 The contracts use multiple libraries from [OpenZeppelin](https://github.com/OpenZeppelin/openzeppelin-solidity):
+
 | Contract Name | Description  |
 | ------ | ------ |
 | [RBAC](https://github.com/OpenZeppelin/openzeppelin-solidity/blob/master/contracts/access/rbac/RBAC.sol) and [Roles](https://github.com/OpenZeppelin/openzeppelin-solidity/blob/master/contracts/access/rbac/Roles.sol) | RBAC is used to manage the roles: admin, storeowner and shopper.
