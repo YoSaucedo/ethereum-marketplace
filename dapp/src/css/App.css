@@ -1,0 +1,61 @@
+html {
+    box-sizing: border-box;
+  }
+
+  body {
+    background-color: rgb(161, 224, 153);
+    padding: 20px;
+    margin: 0;
+  }
+
+  *, *::before, *::after {
+    box-sizing: inherit;
+    padding: 0;
+    margin: 0;
+  }
+
+  .App {
+    width: 960px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  ul.header {
+    list-style: none;
+    display: flex;
+    background-color: black;
+    margin-bottom: 20px;
+  }
+
+  ul.header li {
+    padding: 20px;
+  }
+
+  ul.header li a {
+    color: white;
+    text-decoration: none;
+  }
+
+  .content {
+    background-color: #FFF;
+    padding: 20px;
+  }
+  .content h2 {
+    padding: 0;
+    margin: 0;
+  }
+  .content li {
+    margin-bottom: 10px;
+  }
+
+  /* .current {
+    border-bottom: 4px solid white;
+  }
+
+  h1 {
+    margin-bottom: 20px;
+  }
+
+  p {
+    margin-bottom: 15px;
+  } */

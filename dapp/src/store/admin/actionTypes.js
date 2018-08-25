@@ -1,0 +1,2 @@
+export const STOREOWNERS_FETCHED = 'admin.STOREOWNERS_FETCHED';
+export const STOREOWNER_ADDED = 'admin.STOREOWNER_ADDED';

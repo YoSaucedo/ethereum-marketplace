@@ -1,0 +1,12 @@
+export const STORES_FETCHED = 'storeowner.STORES_FETCHED';
+export const STOREINDEX_FETCHED = 'storeowner.STOREINDEX_FETCHED';
+export const STORE_ADDED = 'storeowner.STORE_ADDED';
+export const PRODUCT_ADDED = 'storeowner.PRODUCT_ADDED';
+export const PRODUCTINDEX_FETCHED = 'storeowner.PRODUCTINDEX_FETCHED';
+export const PRODUCTS_FETCHED = 'storeowner.PRODUCTS_FETCHED';
+export const PRODUCT_SELECTED = 'storeowner.PRODUCT_SELECTED';
+export const PRODUCT_UPDATED = 'storeowner.PRODUCT_UPDATED';
+export const PRODUCT_DELETED = 'storeowner.PRODUCT_DELETED';
+export const BALANCE_FETCHED = 'storeowner.BALANCE_FETCHED';
+export const FUNDS_WITHDRAWN = 'storeowner.FUNDS_WITHDRAWN';
+export const ORDER_CONFIRMED = 'storeowner.ORDER_CONFIRMED';
