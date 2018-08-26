@@ -31,8 +31,9 @@ $ ganache-cli
 - Choose Localhost 8545 as network.
 - Import the second and third account via their private keys.
 
-**Compile and migrate the contracts to the test blockchain**
-Open a console and go to the project directory, then use the following commands:
+**Compile and migrate the contracts to the test blockchain:**
+
+Open a console and go to the directory called dapp, then use the following commands:
 ```sh
 $ truffle compile
 $ truffle migrate

@@ -5,11 +5,7 @@ import "./zeppelin/lifecycle/Pausable.sol";
 import "./zeppelin/lifecycle/Destructible.sol";
 import "./Purchase.sol";
 
-
-//TODO test updateProduct
-//TODO test deleteProduct
-
-//https://medium.com/@robhitchens/solidity-crud-part-2-ed8d8b4f74ec
+/** @title Store */
 contract Store is Ownable, Pausable, Destructible {
 
     /* Store internals */
@@ -31,15 +27,8 @@ contract Store is Ownable, Pausable, Destructible {
     event FundsPayed(address indexed sender, uint256 amount);
 
 
-    /**
-        @notice Represents a product:
-        Product id: @id
-        Product name: @name
-        Decription: @description
-        Amount of items in a single product: @default_amount
-    */
     struct Product {
-        uint256 arrayIndex;// das hier muss der arrayindex werden, damit ich weiß, an welcher Stelle im Array das Produkt hinterlegt ist.
+        uint256 arrayIndex;
         bytes32 name;
         bytes description;
         uint256 price;
@@ -51,16 +40,23 @@ contract Store is Ownable, Pausable, Destructible {
         uint256 productId;
     }
 
-    //Muss/Kann ich hier checken, dass der Sender ein ShopOwner ist?
-    //The owner must be provided, since the MarketPlace-contract is creating the store.
+
+    /**
+     * @dev Constructor, transfers the ownership of the store to the storeowner.
+     * @param _name The name for the new store.
+     * @param _owner The address of the storeowner.
+     */
     constructor(bytes32 _name, address _owner) public {
         require(address(this).balance == 0, "The contract-balance wasn't 0.");
         transferOwnership(_owner);
-        // owner = _owner; //msg.sender ist der Factory-Vertrag, bzw muss der sein, das könnte ich per modifier checken
         store_name = _name;
         currentId = 0;
     }
 
+    /**
+     * @dev Fetches the product ids.
+     * @return An array of product ids.
+     */
     function getProductIds() 
         public 
         view 
@@ -69,6 +65,11 @@ contract Store is Ownable, Pausable, Destructible {
         return productIds;
     }
 
+    /**
+     * @dev Fetches the data of one product.
+     * @param id The product id.
+     * @return The id, name, description, price and quantity of the product.
+     */
     function getProduct(uint256 id) 
         public 
         view 
@@ -83,13 +84,18 @@ contract Store is Ownable, Pausable, Destructible {
         );
     }
 
+    /**
+     * @dev Adds a new product to the store.
+     * @param name The name of the new product.
+     * @param description A description for the new product.
+     * @param price The price for the new product.
+     * @param quantity The stock amount of the new product.
+     */
     function addProduct(bytes32 name, bytes description, uint256 price, uint256 quantity) 
         public 
         whenNotPaused
         onlyOwner
     {
-        //check if price > 0?
-        //productIds.length == arrayIndex where id of this product will be stored 
         Product memory product = Product(productIds.length, name, description, price, quantity);
         productIds.push(currentId);
         products[currentId] = product;
@@ -97,6 +103,11 @@ contract Store is Ownable, Pausable, Destructible {
         currentId++;
     }
 
+    /**
+     * @dev Updates the price of a product.
+     * @param id The id of the product.
+     * @param _price The new price for this product.
+     */
     function updateProduct(uint256 id, uint256 _price) 
         public 
         whenNotPaused
@@ -106,6 +117,10 @@ contract Store is Ownable, Pausable, Destructible {
         emit ProductUpdated(products[id].arrayIndex, products[id].name, products[id].description, products[id].price, products[id].quantity);
     }
 
+    /**
+     * @dev Deletes a product from the store.
+     * @param id The id of the product.
+     */
     function deleteProduct(uint256 id) 
         public 
         whenNotPaused
@@ -123,53 +138,46 @@ contract Store is Ownable, Pausable, Destructible {
         emit ProductDeleted(id);
     }
 
+    /**
+     * @dev Orders a product and creates a new Purchase-contract to document the order.
+     * @param id The product id.
+     * @return purchaseContract The address of the new Purchase-contract.
+     */
     function orderProduct(uint256 id) 
         public 
         whenNotPaused
         returns (address purchaseContract) 
     {
-        //if (msg.value >= products[id].price) {
-        //check if quantity is > 0!
-
         require(products[id].quantity > 0, "The product is not in stock.");
         uint256 stake = products[id].price * 2;
-        Purchase newPurchase = (new Purchase).value(stake)(id, owner);
         products[id].quantity--; 
-        //TODO kann ich den neuen contract nicht einfach in orders pushen? warum verwalte ich die orderId/orderId?
+        Purchase newPurchase = (new Purchase).value(stake)(id, owner);
+        
         orders[orderId] = Order(address(newPurchase), id);    
         emit ProductOrdered(id, address(newPurchase), products[id].price);
         orderId++;
-        return address(newPurchase); //oder orderId returnen?
-            // store_balance += products[id].price; //store_balance
-            //debit their account => geben die nur die Erlaubnis den Preis einzuziehen und ich zieh ein?
-            //TODO Geld ist jetzt schon auf diesem Contract wenn es als msg.value mitkam? also auf this.balance?
-            //Was passiert wenn zu viel gezahlt wird? Was passiert wenn zu wenig gezahlt wird?
-
-            //Hier eventuell einen Purchase Contract anlegen? Dann müsste der Store aber immer genug Kohle haben, um
-            //das doppelte an Preis einzuzahlen... Nicht unbedingt nötig... Wir können dem Käufer eine revokePurchase
-            //Funktion geben, wo dann ein Admin klären muss und der Verkäufer nachweisen muss, dass versendet und 
-            //zugestellt wurde.
-        //}
+        return address(newPurchase);
     }
 
+    /** 
+     * @dev Allows the storeowner to withdraw funds from the store.
+     * @param amount The amount of money (in Wei) to be withdrawn.
+     */
     function withdraw(uint256 amount) 
         public 
-        whenNotPaused
         onlyOwner 
     {
-        require(address(this).balance >= amount, "The contract hasn't enough balance.");    //check if we have enough money
-        //Integer Overflow/Underflow checken?
+        require(address(this).balance >= amount, "The contract hasn't enough balance.");
         msg.sender.transfer(amount);
         emit FundsWithdrew(amount, address(this).balance);
     }
 
     /**
-        @notice Payable fallback - wird vom Purchase-Contract gentutzt um die Zahlung hier zu hinterlegen
-    */
+     * @dev Payable fallback function.
+     */
     function() 
         public
         payable 
-        whenNotPaused 
     {
         emit FundsPayed(msg.sender, msg.value);
     }

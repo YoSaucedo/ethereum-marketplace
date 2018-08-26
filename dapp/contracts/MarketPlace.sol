@@ -53,7 +53,7 @@ contract MarketPlace is Ownable, RBAC, Pausable, Destructible {
      * @dev Constructor, adds the msg.sender as admin.
      */
     constructor() public {
-        addRole(msg.sender, ROLE_ADMIN);    // addRole and Modifier onlyRole are inherited from RBAC.sol
+        addRole(msg.sender, ROLE_ADMIN);
 
     }
 
@@ -61,7 +61,7 @@ contract MarketPlace is Ownable, RBAC, Pausable, Destructible {
      * @dev Gets the role for the msg.sender.
      * @return the number for the according role (0 for admin, 1 for storeowner, 2 for shopper).
      */
-    function getRole() view public returns (uint) {
+    function getRole() public view returns (uint) {
         bool isStoreOwner = hasRole(msg.sender, ROLE_STOREOWNER); 
         bool isAdmin = hasRole(msg.sender, ROLE_ADMIN);
         if (isAdmin)
@@ -104,25 +104,17 @@ contract MarketPlace is Ownable, RBAC, Pausable, Destructible {
      * @return storeOwners An array with the addresses of all storeowners.
      */
     function getStoreOwners() 
-        view 
         public
+        view 
         onlyRole(ROLE_ADMIN)  
         returns(address[]) 
     {
         return storeOwners;
     }
 
-    //evtl. removeStoreOwner(address storeOwner) ?? 
-    //=> fetch myStores from this storeOwner from myStores
-    //=> delete all Stores in storeIndex (Mist, dafür müsste ich durch alle Einträge laufen 
-    //oder es off-chain machen mit einem updateStoreFronts-Befehl oder setStoreFronts) !!! Sinnvoller!
-    //, set value in myStores to null or something like that - address[]?
-    // getStoreOwners(), off-chain Array updaten und setStoreOwners()
-
-
+   
     //STORES
 
-    //Marketplace dient als StoreFactory!
     /** 
      * @dev Creates a store for the message sender if he is registered as a storeowner.
      * @param _name The name of the new store.
@@ -152,10 +144,9 @@ contract MarketPlace is Ownable, RBAC, Pausable, Destructible {
      * @param _storeOwner The address of the storeowner.
      * @return An array with the store addresses of this storeowner.
      */
-    //Modifier evtl. nicht nötig, im Grunde können das doch alle ansehen...
     function getStoresOf(address _storeOwner) 
-        view 
-        public 
+        public
+        view  
         onlyAdminOrStoreOwner(msg.sender, _storeOwner)
         returns(address[])
     {
@@ -166,9 +157,9 @@ contract MarketPlace is Ownable, RBAC, Pausable, Destructible {
      * @dev Fetches all saved store-addresses.
      * @return An array with all saved store addresses. 
      */
-    function getStoreIndex() 
-        view 
+    function getStoreIndex()
         public 
+        view 
         returns(address[]) 
     {
         return storeIndex;
@@ -180,8 +171,8 @@ contract MarketPlace is Ownable, RBAC, Pausable, Destructible {
      * @return The store address, store name and storeowner address for this shop.
      */
     function getStore(address storeAddress) 
+        public
         view 
-        public 
         returns (address, bytes32, address) 
     {
         return (
