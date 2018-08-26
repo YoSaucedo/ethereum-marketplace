@@ -25,11 +25,11 @@
 
 ### Further Patterns:
 - **Contract Factory**
--- The Marketplace functions as factory for the Store contracts. 
--- The Store functions as factory for the Purchase contracts.
+	- The Marketplace functions as factory for the Store contracts. 
+	- The Store functions as factory for the Purchase contracts.
 - **MultiSignature**
--- A MulitSig was considered to approve a new storeowner through multiple admins. But to avoid making the app more complicated to test it was discarded.
+	- A MulitSig was considered to approve a new storeowner through multiple admins. But to avoid making the app more complicated to test it was discarded.
 - **CRUD operations**
--- To manage the products the CRUD pattern described by Rob Hitchens was used: 
+	- To manage the products the CRUD pattern described by Rob Hitchens was used: 
 [Solidity CRUD Part 1](https://medium.com/@robhitchens/solidity-crud-part-1-824ffa69509a)
 [Solidity CRUD Part 2](https://medium.com/@robhitchens/solidity-crud-part-2-ed8d8b4f74ec)
