@@ -74,7 +74,8 @@ $ ganache-cli
 $ truffle test
 ```
 **Test Coverage**
-I tested all functions of all contracts for their functionality, because I changed the contracts multiple times during the development and had to check again and again if everything still was working.
+
+I tested all functions of all contracts for their functionality, because I changed the contracts multiple times during the development and had to check again and again if everything still was working. Only some simple getter-functions aren't tested.
 
 ### Used Libraries
 The contracts use multiple libraries from [OpenZeppelin](https://github.com/OpenZeppelin/openzeppelin-solidity):
