@@ -70,6 +70,7 @@ $ npm start
 
 ### Test the smart contracts
 ```sh
+$ ganache-cli
 $ truffle test
 ```
 **Test Coverage**
